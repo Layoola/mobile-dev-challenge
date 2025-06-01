@@ -6,9 +6,12 @@ type InstantNoodle {
   name: String
   brand: String
   spicinessLevel: Int
+  spicinessDescription: String
   originCountry: InstantNoodleOriginCountryType
   rating: Int
   imageURL: String
+  reviewsCount: Int
+  lastReviewedAt: DateTime
   category: Category
   createdAt: DateTime
 }
@@ -43,6 +46,8 @@ input InstantNoodleWhereInput {
   originCountry: InstantNoodleOriginCountryTypeNullableFilter
   rating: IntFilter
   imageURL: StringFilter
+  reviewsCount: IntFilter
+  lastReviewedAt: DateTimeNullableFilter
   category: CategoryWhereInput
   createdAt: DateTimeNullableFilter
 }
@@ -123,6 +128,8 @@ input InstantNoodleOrderByInput {
   originCountry: OrderDirection
   rating: OrderDirection
   imageURL: OrderDirection
+  reviewsCount: OrderDirection
+  lastReviewedAt: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -138,6 +145,8 @@ input InstantNoodleUpdateInput {
   originCountry: InstantNoodleOriginCountryType
   rating: Int
   imageURL: String
+  reviewsCount: Int
+  lastReviewedAt: DateTime
   category: CategoryRelateToOneForUpdateInput
   createdAt: DateTime
 }
@@ -160,6 +169,8 @@ input InstantNoodleCreateInput {
   originCountry: InstantNoodleOriginCountryType
   rating: Int
   imageURL: String
+  reviewsCount: Int
+  lastReviewedAt: DateTime
   category: CategoryRelateToOneForCreateInput
   createdAt: DateTime
 }
