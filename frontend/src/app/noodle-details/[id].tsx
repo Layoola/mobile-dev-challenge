@@ -1,120 +1,186 @@
-import { Stack, useLocalSearchParams } from "expo-router";
+import React, { useMemo } from "react";
 import {
   View,
   Text,
   ActivityIndicator,
-  Image,
-  ScrollView,
   StyleSheet,
+  FlatList,
+  Pressable,
 } from "react-native";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { GET_NOODLES } from "./queries";
+import { NoodleItem } from "./components/NoodleItem";
+import { CountryDropdown } from "./components/CountryDropdown";
+import { SpicinessDropdown } from "./components/SpicinessDropdown";
+import { ClearFiltersButton } from "./components/ClearFiltersButton";
+import { Stack, router } from "expo-router";
 
-const GET_NOODLE_DETAILS = gql`
-  query GetNoodleDetails($id: ID!) {
-    instantNoodle(where: { id: $id }) {
-      id
-      name
-      brand
-      spicinessLevel
-      originCountry
-      rating
-      imageURL
-      category {
-        name
-      }
-    }
-  }
-`;
+import { Ionicons } from "@expo/vector-icons";
+import { useFilters } from "./context/FiltersContext";
 
-export default function NoodlesDetails() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const { loading, error, data } = useQuery(GET_NOODLE_DETAILS, {
-    variables: { id },
-    skip: !id,
-  });
+export type Country =
+  | "south_korea"
+  | "indonesia"
+  | "malaysia"
+  | "thailand"
+  | "japan"
+  | "singapore"
+  | "vietnam"
+  | "china"
+  | "taiwan"
+  | "philippines";
 
-  if (loading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+export type NoodleData = {
+  id: string;
+  name: string;
+  spicinessLevel: number;
+  originCountry: Country;
+  rating: number;
+};
 
-  if (error || !data?.instantNoodle) {
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>Failed to load noodle details.</Text>
-      </View>
-    );
-  }
+export default function NoodleListScreen() {
+  const {
+    selectedCountries,
+    selectedSpiciness,
+    setSelectedCountries,
+    setSelectedSpiciness,
+    clearFilters,
+    hasActiveFilters,
+  } = useFilters();
 
-  const noodle = data.instantNoodle;
+  const { loading, error, data } = useQuery<{
+    instantNoodles: NoodleData[];
+  }>(GET_NOODLES);
+
+  const filteredNoodles = useMemo(() => {
+    if (!data?.instantNoodles) return [];
+
+    return data.instantNoodles.filter((noodle) => {
+      const countryMatch =
+        selectedCountries.length === 0 ||
+        selectedCountries.includes(noodle.originCountry);
+      const spicinessMatch =
+        selectedSpiciness.length === 0 ||
+        selectedSpiciness.includes(noodle.spicinessLevel);
+
+      return countryMatch && spicinessMatch;
+    });
+  }, [data?.instantNoodles, selectedCountries, selectedSpiciness]);
+
+  if (loading) return <ActivityIndicator style={styles.loader} size="large" />;
+  if (error) return <Text style={styles.error}>Error: {error.message}</Text>;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Stack.Screen options={{ title: noodle.name }} />
+    <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerTitle: "Noodles",
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push(`/favourites`)}
+              style={styles.headerButton}
+            >
+              <Ionicons
+                name="heart-outline"
+                size={30}
+                color="red"
+                style={{ width: 30, height: 30 }}
+              />
+            </Pressable>
+          ),
+        }}
+      />
 
-      {noodle.imageURL && (
-        <Image
-          source={{ uri: noodle.imageURL }}
-          style={styles.image}
-          resizeMode="cover"
-        />
-      )}
+      <View style={styles.filtersContainer}>
+        <View style={styles.filtersColumn}>
+          <View style={styles.filterItem}>
+            <CountryDropdown
+              selectedCountries={selectedCountries}
+              onSelectionChange={setSelectedCountries}
+            />
+          </View>
+          <View style={styles.filterItem}>
+            <SpicinessDropdown
+              selectedSpiciness={selectedSpiciness}
+              onSelectionChange={setSelectedSpiciness}
+            />
+          </View>
+        </View>
 
-      <Text style={styles.title}>{noodle.name}</Text>
-      <Text style={styles.subtitle}>Brand: {noodle.brand}</Text>
-
-      <View style={styles.tags}>
-        <Text style={styles.tag}>🌍 {noodle.originCountry}</Text>
-        <Text style={styles.tag}>🔥{"🔥".repeat(noodle.spicinessLevel)}</Text>
-        <Text style={styles.tag}>⭐ {noodle.rating}/10</Text>
-        <Text style={styles.tag}>📦 {noodle.category?.name}</Text>
+        {hasActiveFilters && (
+          <View style={styles.clearButtonContainer}>
+            <ClearFiltersButton onPress={clearFilters} />
+          </View>
+        )}
       </View>
-    </ScrollView>
+
+      <View style={styles.listContainer}>
+        <Text style={styles.resultCount}>
+          {filteredNoodles.length} noodle
+          {filteredNoodles.length !== 1 ? "s" : ""} found
+        </Text>
+
+        <FlatList
+          data={filteredNoodles}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <NoodleItem {...item} />}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          directionalLockEnabled
+          contentContainerStyle={styles.listContent}
+        />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    paddingBottom: 40,
+    flex: 1,
+    backgroundColor: "#f8f9fa",
   },
-  centered: {
+  loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  errorText: {
+  error: {
     color: "red",
+    padding: 16,
+    textAlign: "center",
   },
-  image: {
+  headerButton: {
+    marginRight: 16,
+    padding: 4,
+  },
+  filtersContainer: {
+    backgroundColor: "white",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e9ecef",
+  },
+  filtersColumn: {
+    gap: 12,
+  },
+  filterItem: {
     width: "100%",
-    aspectRatio: 1,
-    borderRadius: 12,
-    marginBottom: 16,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 4,
+  clearButtonContainer: {
+    marginTop: 12,
+    alignItems: "center",
   },
-  subtitle: {
-    fontSize: 16,
+  listContainer: {
+    flex: 1,
+    padding: 16,
+  },
+  resultCount: {
+    fontSize: 14,
+    color: "#6c757d",
     marginBottom: 12,
+    textAlign: "center",
   },
-  tags: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-  },
-  tag: {
-    backgroundColor: "#ddd",
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 14,
-    marginRight: 8,
-    marginBottom: 8,
+  listContent: {
+    paddingBottom: 20,
   },
 });
