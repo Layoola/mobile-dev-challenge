@@ -5,6 +5,9 @@ export const GET_NOODLES = gql`
     instantNoodles {
       id
       name
+      spicinessLevel
+      originCountry
+      rating
     }
   }
 `;

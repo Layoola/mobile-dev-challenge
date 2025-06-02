@@ -5,7 +5,9 @@ import client from "@/api/client";
 export default function RootLayout() {
   return (
     <ApolloProvider client={client}>
-      <Stack />
+      <FiltersProvider>
+        <Stack />
+      </FiltersProvider>
     </ApolloProvider>
   );
 }
