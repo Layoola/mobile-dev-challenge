@@ -5,15 +5,17 @@ import {
   ActivityIndicator,
   StyleSheet,
   FlatList,
+  Pressable,
 } from "react-native";
 import { useQuery } from "@apollo/client";
 import { GET_NOODLES } from "./queries";
 import { NoodleItem } from "./components/NoodleItem";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useFilters } from "./context/FiltersContext";
 import CountryDropdown from "./components/CountryDropdown";
 import SpicinessDropdown from "./components/SpicinessDropdown";
 import ClearFiltersButton from "./components/ClearFiltersButton";
+import { Ionicons } from "@expo/vector-icons";
 
 export type Country =
   | "south_korea"
@@ -68,7 +70,24 @@ export default function NoodleListScreen() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ headerTitle: "Noodles" }} />
+      <Stack.Screen
+        options={{
+          headerTitle: "Noodles",
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push(`/favorites`)}
+              style={styles.headerButton}
+            >
+              <Ionicons
+                name="heart-outline"
+                size={30}
+                color="red"
+                style={{ width: 30, height: 30 }}
+              />
+            </Pressable>
+          ),
+        }}
+      />
       <View style={styles.filtersContainer}>
         <View style={styles.filtersColumn}>
           <View style={styles.filterItem}>
@@ -145,5 +164,9 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 20,
+  },
+  headerButton: {
+    marginRight: 16,
+    padding: 4,
   },
 });
