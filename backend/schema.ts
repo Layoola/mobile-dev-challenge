@@ -5,8 +5,10 @@ import {
   select,
   relationship,
   timestamp,
+  virtual,
 } from '@keystone-6/core/fields';
 import { allowAll } from '@keystone-6/core/access';
+import type { Lists } from '.keystone/types';
 
 export const lists = {
   InstantNoodle: list({
@@ -26,6 +28,18 @@ export const lists = {
         },
         defaultValue: 3,
         ui: { description: 'Scale of 1 (mild) to 5 (🔥)' },
+      }),
+      spicinessDescription: virtual({Add commentMore actions
+        field: graphql.field({
+          type: graphql.String,
+          resolve(item) {
+            const spicinessLevel = item.spicinessLevel;
+            if (spicinessLevel <= 2) return 'Mild';
+            if (spicinessLevel <= 4) return 'Medium';
+            return 'Hot';
+          },
+        }),
+        ui: { description: "Spiciness description from 'Mild'  to 'Hot' (🔥)" },
       }),
       originCountry: select({
         type: 'enum',
@@ -87,4 +101,4 @@ export const lists = {
       }),
     },
   }),
-};
+}; satisfies Lists;
