@@ -11,6 +11,7 @@ type InstantNoodle {
   rating: Int
   imageURL: String
   reviewsCount: Int
+  lastReviewedAt: DateTime
   category: Category
   createdAt: DateTime
 }
@@ -45,7 +46,8 @@ input InstantNoodleWhereInput {
   originCountry: InstantNoodleOriginCountryTypeNullableFilter
   rating: IntFilter
   imageURL: StringFilter
-  reviewsCount: IntNullableFilter
+  reviewsCount: IntFilter
+  lastReviewedAt: DateTimeNullableFilter
   category: CategoryWhereInput
   createdAt: DateTimeNullableFilter
 }
@@ -107,16 +109,6 @@ input InstantNoodleOriginCountryTypeNullableFilter {
   not: InstantNoodleOriginCountryTypeNullableFilter
 }
 
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntNullableFilter
-}
 
 input DateTimeNullableFilter {
   equals: DateTime
@@ -138,6 +130,7 @@ input InstantNoodleOrderByInput {
   rating: OrderDirection
   imageURL: OrderDirection
   reviewsCount: OrderDirection
+  lastReviewedAt: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -154,6 +147,7 @@ input InstantNoodleUpdateInput {
   rating: Int
   imageURL: String
   reviewsCount: Int
+  lastReviewedAt: DateTime
   category: CategoryRelateToOneForUpdateInput
   createdAt: DateTime
 }
@@ -177,6 +171,7 @@ input InstantNoodleCreateInput {
   rating: Int
   imageURL: String
   reviewsCount: Int
+  lastReviewedAt: DateTime
   category: CategoryRelateToOneForCreateInput
   createdAt: DateTime
 }

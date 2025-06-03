@@ -19,7 +19,8 @@ model InstantNoodle {
   originCountry  String
   rating         Int       @default(5)
   imageURL       String    @default("")
-  reviewsCount   Int?      @default(0)
+  reviewsCount   Int       @default(0)
+  lastReviewedAt DateTime?
   category       Category? @relation("InstantNoodle_category", fields: [categoryId], references: [id])
   categoryId     String?   @map("category")
   createdAt      DateTime? @default(now())
