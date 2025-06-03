@@ -9,9 +9,12 @@ import {
 } from "react-native";
 
 const SPICINESS_LEVELS = [
+  { value: 1, label: "Mild" },
   { value: 2, label: "Mild" },
+  { value: 3, label: "Medium" },
   { value: 4, label: "Medium" },
   { value: 5, label: "Hot" },
+
 ];
 
 interface SpicinessDropdownProps {
@@ -34,7 +37,7 @@ const SpicinessDropdown: React.FC<SpicinessDropdownProps> = ({
     if (selectedSpiciness.length === 0) return "Select spiciness levels...";
     if (selectedSpiciness.length === 1) {
       const level = SPICINESS_LEVELS.find(
-        (l) => selectedSpiciness[0] >= l.value
+        (l) => selectedSpiciness[0] === l.value
       );
       return `${level?.label} (${level?.value})`;
     }
