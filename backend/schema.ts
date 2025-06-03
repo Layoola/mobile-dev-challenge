@@ -29,7 +29,7 @@ export const lists = {
         defaultValue: 3,
         ui: { description: 'Scale of 1 (mild) to 5 (🔥)' },
       }),
-      spicinessDescription: virtual({Add commentMore actions
+      spicinessDescription: virtual({
         field: graphql.field({
           type: graphql.String,
           resolve(item) {
