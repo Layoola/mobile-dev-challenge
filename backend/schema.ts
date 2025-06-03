@@ -101,4 +101,4 @@ export const lists = {
       }),
     },
   }),
-}; satisfies Lists;
+} satisfies Lists;
