@@ -1,6 +1,7 @@
 import { ApolloProvider } from "@apollo/client";
 import { Stack } from "expo-router";
 import client from "@/api/client";
+import {FiltersProvider} from "@/app/context/FiltersContext";
 
 export default function RootLayout() {
   return (
