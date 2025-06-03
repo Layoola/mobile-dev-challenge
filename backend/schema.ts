@@ -72,11 +72,53 @@ export const lists = {
       }),
       reviewsCount: integer({
         validation: {
-          min: 0,
+          isRequired: true
         },
         defaultValue: 0,
         ui: { description: 'Number of noodle reviews' },
+        hooks: {
+          validate: ({ operation, item, resolvedData, addValidationError }) => {
+            if (operation === 'delete') {
+              return;
+            }
+
+            if (!resolvedData.reviewsCount) {
+              return;
+            }
+
+            if (operation === 'create') {
+              if (resolvedData.reviewsCount < 0) {
+                return addValidationError(
+                  `Reviews count field cannot be negative`,
+                );
+              }
+              return;
+            }
+
+            const newReviewsCount = resolvedData.reviewsCount;
+            if (typeof newReviewsCount !== 'number') {
+              return;
+            }
+
+            const currentCount = item.reviewsCount;
+
+            if (newReviewsCount < currentCount) {
+              return addValidationError(
+                `Reviews count field cannot be decreased`,
+              );
+            }
+
+            resolvedData.reviewsCount = newReviewsCount;
+          },
+          beforeOperation: ({ operation, resolvedData }) => {
+            const newReviewsCount = resolvedData?.reviewsCount;
+            if (newReviewsCount && operation === 'update') {
+              resolvedData.lastReviewedAt = new Date();
+            }
+          },
+        },
       }),
+      lastReviewedAt: timestamp(),
       category: relationship({
         ref: 'Category.noodles',
         many: false,
