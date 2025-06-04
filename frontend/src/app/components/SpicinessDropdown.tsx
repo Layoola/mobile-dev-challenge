@@ -36,7 +36,7 @@ const SpicinessDropdown: React.FC<SpicinessDropdownProps> = ({
     if (selectedSpiciness.length === 0) return "Select spiciness levels...";
     if (selectedSpiciness.length === 1) {
       const level = SPICINESS_LEVELS.find(
-        (l) => l.value === selectedSpiciness[0]
+        (l) => selectedSpiciness[0] >= l.value
       );
       return `${level?.label} (${level?.value})`;
     }
