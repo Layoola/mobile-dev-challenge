@@ -56,6 +56,13 @@ export const lists = {
         validation: { isRequired: false },
         ui: { description: 'URL to the noodle image' },
       }),
+      reviewsCount: integer({
+        validation: {
+          min: 0,
+        },
+        defaultValue: 0,
+        ui: { description: 'Number of noodle reviews' },
+      }),
       category: relationship({
         ref: 'Category.noodles',
         many: false,
