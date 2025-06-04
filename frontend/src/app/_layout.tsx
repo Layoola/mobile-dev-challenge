@@ -10,5 +10,5 @@ export default function RootLayout() {
         <Stack />
       </FiltersProvider>
     </ApolloProvider>
-  );
+  )
 }
