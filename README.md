@@ -1,3 +1,20 @@
+# Submission Notes
+The branch are named to consist of the number they are in their stack and also the number they are in the general readme. It is named in order **${stack}-{No in stack}-{No in general}**. For example FE-task1-task3.
+
+**Due to tasks depending on each other, merge in this order:**
+
+1. https://github.com/Layoola/mobile-dev-challenge/pull/12 - Merges the 4th task to the 5th overall question
+
+2. https://github.com/Layoola/mobile-dev-challenge/pull/10 - Merges the 5th task to the 3rd overall question
+
+3. https://github.com/Layoola/mhttps://github.com/Layoola/mobile-dev-challenge/pullsobile-dev-challenge/pull/9   - Merges the 3rd task to the 2nd overall question 
+
+4. https://github.com/Layoola/mobile-dev-challenge/pull/8  - Merges the 2nd task to the 1st overall question
+
+5. https://github.com/Layoola/mobile-dev-challenge/pull/7  - Merges the 1st into main
+
+---
+
 # Mobile Dev Challenge
 
 Welcome! 👋
