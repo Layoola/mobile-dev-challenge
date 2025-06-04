@@ -120,6 +120,7 @@ export default function NoodlesDetails() {
 
   const noodle = data.instantNoodle;
 
+  
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Stack.Screen options={{ title: noodle.name }} />
