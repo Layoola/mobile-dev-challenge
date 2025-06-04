@@ -7,5 +7,5 @@ export default function RootLayout() {
     <ApolloProvider client={client}>
       <Stack />
     </ApolloProvider>
-  );
+  )
 }
