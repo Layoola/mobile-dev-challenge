@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { gql, useMutation, useQuery } from "@apollo/client";
+import { FavoriteButton } from "../components/FavoritesButton";
 
 const GET_NOODLE_DETAILS = gql`
   query GetNoodleDetails($id: ID!) {
@@ -133,7 +134,8 @@ export default function NoodlesDetails() {
 
       <Text style={styles.title}>{noodle.name}</Text>
       <Text style={styles.subtitle}>Brand: {noodle.brand}</Text>
-
+      <FavoriteButton noodleId={noodle.id} />
+      
       <View style={styles.tags}>
         <Text style={styles.tag}>🌍 {noodle.originCountry}</Text>
         <Text style={styles.tag}>🔥{"🔥".repeat(noodle.spicinessLevel)}</Text>

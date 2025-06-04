@@ -10,10 +10,10 @@ import {
 
 const SPICINESS_LEVELS = [
   { value: 1, label: "Mild" },
-  { value: 2, label: "Medium" },
-  { value: 3, label: "Hot" },
-  { value: 4, label: "Very Hot" },
-  { value: 5, label: "Extremely Hot" },
+  { value: 2, label: "Mild" },
+  { value: 3, label: "Medium" },
+  { value: 4, label: "Medium" },
+  { value: 5, label: "Hot" },
 ];
 
 interface SpicinessDropdownProps {
