@@ -7,7 +7,7 @@ The branch are named to consist of the number they are in their stack and also t
 
 2. https://github.com/Layoola/mobile-dev-challenge/pull/10 - Merges the 5th task to the 3rd overall question
 
-3. https://github.com/Layoola/mhttps://github.com/Layoola/mobile-dev-challenge/pullsobile-dev-challenge/pull/9   - Merges the 3rd task to the 2nd overall question 
+3. https://github.com/Layoola/mobile-dev-challenge/pull/9   - Merges the 3rd task to the 2nd overall question 
 
 4. https://github.com/Layoola/mobile-dev-challenge/pull/8  - Merges the 2nd task to the 1st overall question
 
