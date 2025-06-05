@@ -72,11 +72,60 @@ export const lists = {
       }),
       reviewsCount: integer({
         validation: {
-          min: 0,
+          isRequired: true
         },
         defaultValue: 0,
         ui: { description: 'Number of noodle reviews' },
+        hooks: {
+          validate: ({ operation, item, resolvedData, addValidationError }) => {
+            if (operation === 'delete') {
+              return;
+            }
+
+            if (!resolvedData.reviewsCount) {
+              return;
+            }
+
+            if (operation === 'create') {
+              if (resolvedData.reviewsCount < 0) {
+                return addValidationError(
+                  `Reviews count field cannot be negative`,
+                );
+              }
+              return;
+            }
+
+            const newReviewsCount = resolvedData.reviewsCount;
+            if (typeof newReviewsCount !== 'number') {
+              return;
+            }
+
+            const currentCount = item.reviewsCount;
+
+            if (newReviewsCount < currentCount) {
+              return addValidationError(
+                `Reviews count field cannot be decreased`,
+              );
+            }
+
+            // Opting for replacing reviews count with the provided input value
+            // this allows admins to set the reviewsCount value as they see fit while customers can only increment by 1
+            //
+            // A more restrictive approach would be to make all calls to increment
+            // the existing value by one regardless of the value is passed in
+            
+
+            resolvedData.reviewsCount = newReviewsCount;
+          },
+          beforeOperation: ({ resolvedData }) => {
+            const newReviewsCount = resolvedData?.reviewsCount;
+            if (newReviewsCount && typeof newReviewsCount === 'number') {
+              resolvedData.lastReviewedAt = new Date();
+            }
+          },
+        },
       }),
+      lastReviewedAt: timestamp(),
       category: relationship({
         ref: 'Category.noodles',
         many: false,
@@ -101,4 +150,5 @@ export const lists = {
       }),
     },
   }),
-} satisfies Lists
+}; satisfies Lists
+
