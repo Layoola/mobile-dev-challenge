@@ -108,11 +108,18 @@ export const lists = {
               );
             }
 
+            // Opting for replacing reviews count with the provided input value
+            // this allows admins to set the reviewsCount value as they see fit while customers can only increment by 1
+            //
+            // A more restrictive approach would be to make all calls to increment
+            // the existing value by one regardless of the value is passed in
+            
+
             resolvedData.reviewsCount = newReviewsCount;
           },
-          beforeOperation: ({ operation, resolvedData }) => {
+          beforeOperation: ({ resolvedData }) => {
             const newReviewsCount = resolvedData?.reviewsCount;
-            if (newReviewsCount && operation === 'update') {
+            if (newReviewsCount && typeof newReviewsCount === 'number') {
               resolvedData.lastReviewedAt = new Date();
             }
           },
