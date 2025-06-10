@@ -9,7 +9,9 @@ import {
 } from "react-native";
 
 const SPICINESS_LEVELS = [
+  { value: 1, label: "Mild" },
   { value: 2, label: "Mild" },
+  { value: 3, label: "Medium" },
   { value: 4, label: "Medium" },
   { value: 5, label: "Hot" },
 ];
